@@ -1,0 +1,40 @@
+@page
+@model FieldLog.Pages.Projects.IndexModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1>Projects</h1>
+
+<p>
+    <a class="btn btn-primary" asp-page="/Projects/New">New Project</a>
+</p>
+
+@if (!Model.Projects.Any())
+{
+<p>No projects yet.</p>
+}
+else
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Created</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Projects)
+        {
+        <tr>
+            <td>@p.Name</td>
+            <td>@p.Location</td>
+            <td>@p.CreatedAt.LocalDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" asp-page="/Projects/Details" asp-route-id="@p.Id">Open</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+}

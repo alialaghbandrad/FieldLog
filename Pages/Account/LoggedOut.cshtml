@@ -1,0 +1,16 @@
+@page
+@model Microsoft.AspNetCore.Mvc.RazorPages.PageModel
+@{
+    ViewData["Title"] = "Logged out";
+}
+
+<h1>Logged out</h1>
+<p>You have successfully logged out of the application.</p>
+
+<p>
+    <a class="btn btn-primary" asp-page="/Account/Login">Log in again</a>
+    <a class="btn btn-outline-secondary" asp-page="/Index">Home</a>
+</p>
+<form method="post" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Account/LoggedOut" class="d-inline">
+    <button type="submit" class="btn btn-link nav-link">Logout</button>
+</form>

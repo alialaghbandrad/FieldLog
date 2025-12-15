@@ -1,0 +1,26 @@
+@page
+@model FieldLog.Pages.Projects.NewModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1>New Project</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Project Name</label>
+        <input class="form-control" asp-for="Name" />
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input class="form-control" asp-for="Location" />
+        <span class="text-danger" asp-validation-for="Location"></span>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Create</button>
+    <a class="btn btn-secondary" asp-page="/Projects/Index">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,74 @@
+@page "{id:guid}"
+@model FieldLog.Pages.Projects.DetailsModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1>@Model.ProjectName</h1>
+<p><strong>Location:</strong> @Model.ProjectLocation</p>
+
+<p class="mb-3">
+    <a class="btn btn-primary" asp-page="/Logs/New" asp-route-projectId="@Model.ProjectId">New Daily Log</a>
+    <a class="btn btn-outline-secondary" asp-page="/Export" asp-route-projectId="@Model.ProjectId">Export CSV</a>
+    <a class="btn btn-outline-secondary" asp-page="/Projects/Index">Back</a>
+</p>
+
+<form method="get" class="row g-2 mb-4">
+    <input type="hidden" name="id" value="@Model.ProjectId" />
+    <div class="col-auto">
+        <label class="form-label">From</label>
+        <input class="form-control" type="date" name="from" value="@Model.FromStr" />
+    </div>
+    <div class="col-auto">
+        <label class="form-label">To</label>
+        <input class="form-control" type="date" name="to" value="@Model.ToStr" />
+    </div>
+    <div class="col-auto d-flex align-items-end">
+        <button class="btn btn-outline-primary" type="submit">Filter</button>
+    </div>
+</form>
+
+@if (!Model.Logs.Any())
+{
+<p>No daily logs yet.</p>
+}
+else
+{
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Weather</th>
+            <th>Subcontractors</th>
+            <th>Open Issues</th>
+            <th>Safety</th>
+            <th>Photos</th>
+            <th class="text-end">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var row in Model.Logs)
+        {
+        <tr>
+            <td>@row.LogDate</td>
+            <td>@row.WeatherSummary</td>
+            <td>@row.SubcontractorCount</td>
+            <td>@row.OpenIssuesCount</td>
+            <td>@row.SafetyCount</td>
+            <td>@row.PhotoCount</td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-primary"
+                   asp-page="/Logs/View"
+                   asp-route-id="@row.LogId">Open</a>
+
+                <a class="btn btn-sm btn-outline-secondary"
+                   asp-page="/Logs/Edit"
+                   asp-route-id="@row.LogId">Edit</a>
+
+                <a class="btn btn-sm btn-outline-danger"
+                   asp-page="/Logs/Delete"
+                   asp-route-id="@row.LogId">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+}

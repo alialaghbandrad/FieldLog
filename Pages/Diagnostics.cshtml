@@ -1,0 +1,22 @@
+@page
+@model FieldLog.Pages.DiagnosticsModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1>Diagnostics</h1>
+
+<p><strong>Environment:</strong> @Model.EnvironmentName</p>
+<p><strong>App Version:</strong> @Model.AppVersion</p>
+
+<p>
+    <a class="btn btn-outline-primary" href="/health" target="_blank">Open /health</a>
+</p>
+
+<h3>Recent Log Tail</h3>
+@if (Model.LogTailLines.Count == 0)
+{
+<p>No logs found yet. Trigger a request and refresh.</p>
+}
+else
+{
+<pre style="max-height:420px; overflow:auto;">@string.Join("\n", Model.LogTailLines)</pre>
+}

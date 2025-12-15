@@ -1,0 +1,15 @@
+@page
+@model FieldLog.Pages.ExportModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1>Export</h1>
+<p>This page exports a CSV for a project. Use the button below.</p>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Project ID</label>
+        <input class="form-control" asp-for="ProjectId" />
+    </div>
+    <button class="btn btn-primary" type="submit">Download CSV</button>
+    <a class="btn btn-secondary" asp-page="/Projects/Index">Back</a>
+</form>
