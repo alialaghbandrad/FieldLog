@@ -26,7 +26,7 @@ public class ViewModel : PageModel
     public string ProjectName { get; set; } = "";
     public string LogDate { get; set; } = "";
 
-    public string WeatherBadge { get; set; } = "—";
+    public string WeatherBadge { get; set; } = "â€”";
     public WeatherDto Weather { get; set; } = new();
 
     public List<EventDto> Events { get; set; } = new();
