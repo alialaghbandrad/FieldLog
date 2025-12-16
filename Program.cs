@@ -31,15 +31,15 @@ builder.Services
     })
     .AddEntityFrameworkStores<AppDbContext>();
 
-/*
+
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
         options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
         options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
     });
-*/
 
+/*
 // Google auth
 var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
 var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
@@ -55,7 +55,7 @@ if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(goo
     });
 }
 
-
+*/
 
 // Health checks
 builder.Services.AddHealthChecks()
