@@ -1,0 +1,287 @@
+@page "{id:guid}"
+@model FieldLog.Pages.Logs.ViewModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1>Daily Log</h1>
+
+<div class="d-flex flex-wrap gap-3 align-items-center mb-3">
+    <div><strong>Project:</strong> @Model.ProjectName</div>
+    <div><strong>Date:</strong> @Model.LogDate</div>
+    <span class="badge bg-secondary">Weather: @Model.WeatherBadge</span>
+</div>
+
+<p class="d-flex flex-wrap gap-2">
+    <a class="btn btn-outline-secondary" asp-page="/Projects/Details" asp-route-id="@Model.ProjectId">Back to Project</a>
+    <a class="btn btn-outline-primary" asp-page="/Logs/Edit" asp-route-id="@Model.LogId">Edit</a>
+    <a class="btn btn-danger" asp-page="/Logs/Delete" asp-route-id="@Model.LogId">Delete</a>
+</p>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>1) Daily Events That Matter</strong></div>
+    <div class="card-body">
+        @if (!Model.Events.Any())
+        {
+        <div class="text-muted">No events recorded.</div>
+        }
+        else
+        {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead><tr><th>Time</th><th>Title</th><th>Details</th></tr></thead>
+                <tbody>
+                    @foreach (var e in Model.Events)
+                    {
+                    <tr>
+                        <td>@e.time</td>
+                        <td>@e.title</td>
+                        <td>@e.details</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>2) Weather Conditions</strong></div>
+    <div class="card-body">
+        <div class="row g-2">
+            <div class="col-md-3"><strong>Temp:</strong> @(Model.Weather.tempC?.ToString() ?? "—") °C</div>
+            <div class="col-md-3"><strong>Wind:</strong> @(Model.Weather.windKph?.ToString() ?? "—") kph</div>
+            <div class="col-md-3"><strong>Precip:</strong> @(Model.Weather.precip ?? "—")</div>
+            <div class="col-md-3"><strong>Notes:</strong> @(Model.Weather.notes ?? "—")</div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>3) Subcontractor Progress</strong></div>
+    <div class="card-body">
+        @if (!Model.Subs.Any())
+        {
+        <div class="text-muted">No subcontractor entries.</div>
+        }
+        else
+        {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead><tr><th>Company</th><th>Trade</th><th>Workers</th><th>Work Done</th><th>%</th></tr></thead>
+                <tbody>
+                    @foreach (var s in Model.Subs)
+                    {
+                    <tr>
+                        <td>@s.company</td>
+                        <td>@s.trade</td>
+                        <td>@s.workers</td>
+                        <td>@s.workDone</td>
+                        <td>@s.percent</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>4) Photos</strong></div>
+    <div class="card-body">
+        @if (!Model.PhotoUrls.Any())
+        {
+        <div class="text-muted">No photos attached.</div>
+        }
+        else
+        {
+        <div class="d-flex flex-wrap gap-2">
+            @foreach (var u in Model.PhotoUrls)
+                {
+            <a href="@u" target="_blank" title="Open">
+                <img src="@u" style="max-width:220px; max-height:160px; object-fit:cover; border:1px solid #ccc;" />
+            </a>
+                }
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>5) Issues / On-site Insights</strong></div>
+    <div class="card-body">
+        @if (!Model.Issues.Any())
+        {
+        <div class="text-muted">No issues recorded.</div>
+        }
+        else
+        {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead><tr><th>Type</th><th>Severity</th><th>Description</th><th>Status</th></tr></thead>
+                <tbody>
+                    @foreach (var i in Model.Issues)
+                    {
+                    <tr>
+                        <td>@i.type</td>
+                        <td>@i.severity</td>
+                        <td>@i.description</td>
+                        <td>@i.status</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>7) Safety Incidents / Near Misses</strong></div>
+    <div class="card-body">
+        @if (!Model.Safety.Any())
+        {
+        <div class="text-muted">No safety items.</div>
+        }
+        else
+        {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead><tr><th>Category</th><th>Description</th><th>Reported To</th></tr></thead>
+                <tbody>
+                    @foreach (var s in Model.Safety)
+                    {
+                    <tr>
+                        <td>@s.category</td>
+                        <td>@s.description</td>
+                        <td>@s.reportedTo</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>8) Labor</strong></div>
+    <div class="card-body">
+        @if (!Model.Labor.Any())
+        {
+        <div class="text-muted">No labor entries.</div>
+        }
+        else
+        {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead><tr><th>Trade</th><th>Workers</th><th>Hours</th><th>Notes</th></tr></thead>
+                <tbody>
+                    @foreach (var l in Model.Labor)
+                    {
+                    <tr>
+                        <td>@l.trade</td>
+                        <td>@l.workers</td>
+                        <td>@l.hours</td>
+                        <td>@l.notes</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>8) Equipment</strong></div>
+    <div class="card-body">
+        @if (!Model.Equipment.Any())
+        {
+        <div class="text-muted">No equipment entries.</div>
+        }
+        else
+        {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead><tr><th>Name</th><th>Hours</th><th>Condition</th><th>Notes</th></tr></thead>
+                <tbody>
+                    @foreach (var e in Model.Equipment)
+                    {
+                    <tr>
+                        <td>@e.name</td>
+                        <td>@e.hours</td>
+                        <td>@e.condition</td>
+                        <td>@e.notes</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>9) Deliveries</strong></div>
+    <div class="card-body">
+        @if (!Model.Deliveries.Any())
+        {
+        <div class="text-muted">No deliveries.</div>
+        }
+        else
+        {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead><tr><th>Vendor</th><th>Material</th><th>Qty</th><th>Time</th></tr></thead>
+                <tbody>
+                    @foreach (var d in Model.Deliveries)
+                    {
+                    <tr>
+                        <td>@d.vendor</td>
+                        <td>@d.material</td>
+                        <td>@d.qty</td>
+                        <td>@d.time</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>9) Inspections</strong></div>
+    <div class="card-body">
+        @if (!Model.Inspections.Any())
+        {
+        <div class="text-muted">No inspections.</div>
+        }
+        else
+        {
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle">
+                <thead><tr><th>Type</th><th>Inspector</th><th>Result</th></tr></thead>
+                <tbody>
+                    @foreach (var i in Model.Inspections)
+                    {
+                    <tr>
+                        <td>@i.type</td>
+                        <td>@i.inspector</td>
+                        <td>@i.result</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header"><strong>General Notes</strong></div>
+    <div class="card-body">
+        @(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)
+    </div>
+</div>

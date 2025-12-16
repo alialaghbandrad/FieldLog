@@ -1,0 +1,523 @@
+@page
+@model FieldLog.Pages.Logs.NewModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1>New Daily Log</h1>
+<p><strong>Project:</strong> @Model.ProjectName</p>
+
+<form method="post" enctype="multipart/form-data" id="logForm">
+    <input type="hidden" asp-for="ProjectId" />
+    <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+    <div class="mb-3">
+        <label class="form-label">Log Date</label>
+        <input class="form-control" asp-for="LogDate" type="date" />
+        <span class="text-danger" asp-validation-for="LogDate"></span>
+    </div>
+
+    <!-- Hidden JSON fields (auto-filled by JS) -->
+    <input type="hidden" asp-for="EventsJson" id="EventsJson" />
+    <input type="hidden" asp-for="WeatherJson" id="WeatherJson" />
+    <input type="hidden" asp-for="SubcontractorsJson" id="SubcontractorsJson" />
+    <input type="hidden" asp-for="IssuesJson" id="IssuesJson" />
+    <input type="hidden" asp-for="SafetyJson" id="SafetyJson" />
+    <input type="hidden" asp-for="LaborJson" id="LaborJson" />
+    <input type="hidden" asp-for="EquipmentJson" id="EquipmentJson" />
+    <input type="hidden" asp-for="DeliveriesJson" id="DeliveriesJson" />
+    <input type="hidden" asp-for="InspectionsJson" id="InspectionsJson" />
+
+    <div class="card mb-3">
+        <div class="card-header"><strong>1) Daily Events That Matter</strong></div>
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label">Time</label>
+                    <input class="form-control" id="ev_time" placeholder="07:30" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Title</label>
+                    <input class="form-control" id="ev_title" placeholder="Concrete pour" />
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label">Details</label>
+                    <input class="form-control" id="ev_details" placeholder="Area A slab pour started..." />
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary w-100" id="ev_add">Add</button>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-striped align-middle" id="ev_table">
+                    <thead>
+                        <tr><th>Time</th><th>Title</th><th>Details</th><th></th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header"><strong>2) Record On-Site Weather Conditions</strong></div>
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <label class="form-label">Temp (°C)</label>
+                    <input class="form-control" id="wx_tempC" type="number" step="0.1" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Wind (kph)</label>
+                    <input class="form-control" id="wx_windKph" type="number" step="0.1" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Precip</label>
+                    <input class="form-control" id="wx_precip" placeholder="snow / rain / none" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Notes</label>
+                    <input class="form-control" id="wx_notes" placeholder="gusty, cloudy..." />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header"><strong>3) Monitor Performance & Subcontractor Progress</strong></div>
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Company</label>
+                    <input class="form-control" id="sc_company" placeholder="ABC Drywall" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Trade</label>
+                    <input class="form-control" id="sc_trade" placeholder="Drywall" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Workers</label>
+                    <input class="form-control" id="sc_workers" type="number" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Work Done</label>
+                    <input class="form-control" id="sc_workDone" placeholder="Level 2 framing" />
+                </div>
+                <div class="col-md-1">
+                    <label class="form-label">% </label>
+                    <input class="form-control" id="sc_percent" type="number" min="0" max="100" />
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary w-100" id="sc_add">Add</button>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-striped align-middle" id="sc_table">
+                    <thead>
+                        <tr><th>Company</th><th>Trade</th><th>Workers</th><th>Work Done</th><th>%</th><th></th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header"><strong>4) Attach Photos for Visual Documentation</strong></div>
+        <div class="card-body">
+            <input class="form-control" type="file" name="Photos" multiple accept="image/*" />
+            <div class="text-muted mt-2">Photos save to <code>/wwwroot/uploads</code> and appear on the View page.</div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header"><strong>5) Identify Issues Early with On-Site Insights</strong></div>
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label">Type</label>
+                    <input class="form-control" id="is_type" placeholder="Delay / RFI / Quality" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Severity</label>
+                    <select class="form-select" id="is_severity">
+                        <option>Low</option>
+                        <option selected>Medium</option>
+                        <option>High</option>
+                        <option>Critical</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Description</label>
+                    <input class="form-control" id="is_desc" placeholder="Material late..." />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="is_status">
+                        <option selected>Open</option>
+                        <option>In Progress</option>
+                        <option>Closed</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary w-100" id="is_add">Add</button>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-striped align-middle" id="is_table">
+                    <thead>
+                        <tr><th>Type</th><th>Severity</th><th>Description</th><th>Status</th><th></th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7, 8, 9: demanding items -->
+    <div class="card mb-3">
+        <div class="card-header"><strong>7) Safety Incidents / Near Misses</strong></div>
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-2">
+                    <label class="form-label">Category</label>
+                    <input class="form-control" id="sf_category" placeholder="Near Miss" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Description</label>
+                    <input class="form-control" id="sf_desc" placeholder="Trip hazard at stairwell..." />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Reported To</label>
+                    <input class="form-control" id="sf_reportedTo" placeholder="Supervisor" />
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary w-100" id="sf_add">Add</button>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-sm table-striped align-middle" id="sf_table">
+                    <thead>
+                        <tr><th>Category</th><th>Description</th><th>Reported To</th><th></th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header"><strong>8) Labor & Equipment Utilization</strong></div>
+        <div class="card-body">
+            <h5>Labor</h5>
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Trade</label>
+                    <input class="form-control" id="lb_trade" placeholder="Carpentry" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Workers</label>
+                    <input class="form-control" id="lb_workers" type="number" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Hours</label>
+                    <input class="form-control" id="lb_hours" type="number" step="0.25" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Notes</label>
+                    <input class="form-control" id="lb_notes" />
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary w-100" id="lb_add">Add</button>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-2">
+                <table class="table table-sm table-striped align-middle" id="lb_table">
+                    <thead><tr><th>Trade</th><th>Workers</th><th>Hours</th><th>Notes</th><th></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <hr />
+            <h5>Equipment</h5>
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Name</label>
+                    <input class="form-control" id="eq_name" placeholder="Boom Lift" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Hours</label>
+                    <input class="form-control" id="eq_hours" type="number" step="0.25" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Condition</label>
+                    <input class="form-control" id="eq_condition" placeholder="OK / Needs service" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Notes</label>
+                    <input class="form-control" id="eq_notes" />
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary w-100" id="eq_add">Add</button>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-2">
+                <table class="table table-sm table-striped align-middle" id="eq_table">
+                    <thead><tr><th>Name</th><th>Hours</th><th>Condition</th><th>Notes</th><th></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header"><strong>9) Deliveries & Inspections</strong></div>
+        <div class="card-body">
+            <h5>Deliveries</h5>
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Vendor</label>
+                    <input class="form-control" id="dv_vendor" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Material</label>
+                    <input class="form-control" id="dv_material" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Qty</label>
+                    <input class="form-control" id="dv_qty" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Time</label>
+                    <input class="form-control" id="dv_time" placeholder="10:15" />
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary w-100" id="dv_add">Add</button>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-2">
+                <table class="table table-sm table-striped align-middle" id="dv_table">
+                    <thead><tr><th>Vendor</th><th>Material</th><th>Qty</th><th>Time</th><th></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <hr />
+            <h5>Inspections</h5>
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Type</label>
+                    <input class="form-control" id="in_type" placeholder="Concrete" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Inspector</label>
+                    <input class="form-control" id="in_inspector" placeholder="City" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Result</label>
+                    <select class="form-select" id="in_result">
+                        <option selected>Pass</option>
+                        <option>Fail</option>
+                        <option>Reinspect</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary w-100" id="in_add">Add</button>
+                </div>
+            </div>
+
+            <div class="table-responsive mt-2">
+                <table class="table table-sm table-striped align-middle" id="in_table">
+                    <thead><tr><th>Type</th><th>Inspector</th><th>Result</th><th></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label"><strong>General Notes</strong></label>
+        <textarea class="form-control" rows="4" asp-for="Notes"></textarea>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Create Log</button>
+    <a class="btn btn-secondary" asp-page="/Projects/Details" asp-route-id="@Model.ProjectId">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // In-memory arrays (we generate JSON from these)
+        const events = [];
+        const subs = [];
+        const issues = [];
+        const safety = [];
+        const labor = [];
+        const equip = [];
+        const deliveries = [];
+        const inspections = [];
+
+        function renderTable(tableId, rows, cols) {
+            const tbody = document.querySelector(tableId + " tbody");
+            tbody.innerHTML = "";
+            rows.forEach((r, idx) => {
+                const tr = document.createElement("tr");
+                cols.forEach(c => {
+                    const td = document.createElement("td");
+                    td.textContent = (r[c] ?? "");
+                    tr.appendChild(td);
+                });
+                const tdBtn = document.createElement("td");
+                tdBtn.className = "text-end";
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "btn btn-sm btn-outline-danger";
+                btn.textContent = "Remove";
+                btn.onclick = () => { rows.splice(idx, 1); syncAll(); };
+                tdBtn.appendChild(btn);
+                tr.appendChild(tdBtn);
+                tbody.appendChild(tr);
+            });
+        }
+
+        function syncAll() {
+            // Weather object from inputs
+            const weather = {
+                tempC: valOrNull("wx_tempC"),
+                windKph: valOrNull("wx_windKph"),
+                precip: document.getElementById("wx_precip").value.trim() || null,
+                notes: document.getElementById("wx_notes").value.trim() || null
+            };
+
+            document.getElementById("EventsJson").value = JSON.stringify(events);
+            document.getElementById("SubcontractorsJson").value = JSON.stringify(subs);
+            document.getElementById("IssuesJson").value = JSON.stringify(issues);
+            document.getElementById("SafetyJson").value = JSON.stringify(safety);
+            document.getElementById("LaborJson").value = JSON.stringify(labor);
+            document.getElementById("EquipmentJson").value = JSON.stringify(equip);
+            document.getElementById("DeliveriesJson").value = JSON.stringify(deliveries);
+            document.getElementById("InspectionsJson").value = JSON.stringify(inspections);
+            document.getElementById("WeatherJson").value = JSON.stringify(weather);
+
+            renderTable("#ev_table", events, ["time","title","details"]);
+            renderTable("#sc_table", subs, ["company","trade","workers","workDone","percent"]);
+            renderTable("#is_table", issues, ["type","severity","description","status"]);
+            renderTable("#sf_table", safety, ["category","description","reportedTo"]);
+            renderTable("#lb_table", labor, ["trade","workers","hours","notes"]);
+            renderTable("#eq_table", equip, ["name","hours","condition","notes"]);
+            renderTable("#dv_table", deliveries, ["vendor","material","qty","time"]);
+            renderTable("#in_table", inspections, ["type","inspector","result"]);
+        }
+
+        function valOrNull(id) {
+            const v = document.getElementById(id).value;
+            if (v === "" || v === null) return null;
+            const n = Number(v);
+            return isNaN(n) ? null : n;
+        }
+
+        // Add handlers
+        document.getElementById("ev_add").onclick = () => {
+            const time = document.getElementById("ev_time").value.trim();
+            const title = document.getElementById("ev_title").value.trim();
+            const details = document.getElementById("ev_details").value.trim();
+            if (!time && !title && !details) return;
+            events.push({ time, title, details });
+            document.getElementById("ev_time").value = "";
+            document.getElementById("ev_title").value = "";
+            document.getElementById("ev_details").value = "";
+            syncAll();
+        };
+
+        document.getElementById("sc_add").onclick = () => {
+            const company = document.getElementById("sc_company").value.trim();
+            const trade = document.getElementById("sc_trade").value.trim();
+            const workers = Number(document.getElementById("sc_workers").value || 0);
+            const workDone = document.getElementById("sc_workDone").value.trim();
+            const percent = Number(document.getElementById("sc_percent").value || 0);
+            if (!company && !trade && !workDone) return;
+            subs.push({ company, trade, workers, workDone, percent });
+            ["sc_company","sc_trade","sc_workers","sc_workDone","sc_percent"].forEach(id => document.getElementById(id).value = "");
+            syncAll();
+        };
+
+        document.getElementById("is_add").onclick = () => {
+            const type = document.getElementById("is_type").value.trim();
+            const severity = document.getElementById("is_severity").value;
+            const description = document.getElementById("is_desc").value.trim();
+            const status = document.getElementById("is_status").value;
+            if (!type && !description) return;
+            issues.push({ type, severity, description, status });
+            document.getElementById("is_type").value = "";
+            document.getElementById("is_desc").value = "";
+            syncAll();
+        };
+
+        document.getElementById("sf_add").onclick = () => {
+            const category = document.getElementById("sf_category").value.trim();
+            const description = document.getElementById("sf_desc").value.trim();
+            const reportedTo = document.getElementById("sf_reportedTo").value.trim();
+            if (!category && !description) return;
+            safety.push({ category, description, reportedTo });
+            ["sf_category","sf_desc","sf_reportedTo"].forEach(id => document.getElementById(id).value = "");
+            syncAll();
+        };
+
+        document.getElementById("lb_add").onclick = () => {
+            const trade = document.getElementById("lb_trade").value.trim();
+            const workers = Number(document.getElementById("lb_workers").value || 0);
+            const hours = Number(document.getElementById("lb_hours").value || 0);
+            const notes = document.getElementById("lb_notes").value.trim();
+            if (!trade) return;
+            labor.push({ trade, workers, hours, notes });
+            ["lb_trade","lb_workers","lb_hours","lb_notes"].forEach(id => document.getElementById(id).value = "");
+            syncAll();
+        };
+
+        document.getElementById("eq_add").onclick = () => {
+            const name = document.getElementById("eq_name").value.trim();
+            const hours = Number(document.getElementById("eq_hours").value || 0);
+            const condition = document.getElementById("eq_condition").value.trim();
+            const notes = document.getElementById("eq_notes").value.trim();
+            if (!name) return;
+            equip.push({ name, hours, condition, notes });
+            ["eq_name","eq_hours","eq_condition","eq_notes"].forEach(id => document.getElementById(id).value = "");
+            syncAll();
+        };
+
+        document.getElementById("dv_add").onclick = () => {
+            const vendor = document.getElementById("dv_vendor").value.trim();
+            const material = document.getElementById("dv_material").value.trim();
+            const qty = document.getElementById("dv_qty").value.trim();
+            const time = document.getElementById("dv_time").value.trim();
+            if (!vendor && !material) return;
+            deliveries.push({ vendor, material, qty, time });
+            ["dv_vendor","dv_material","dv_qty","dv_time"].forEach(id => document.getElementById(id).value = "");
+            syncAll();
+        };
+
+        document.getElementById("in_add").onclick = () => {
+            const type = document.getElementById("in_type").value.trim();
+            const inspector = document.getElementById("in_inspector").value.trim();
+            const result = document.getElementById("in_result").value;
+            if (!type && !inspector) return;
+            inspections.push({ type, inspector, result });
+            ["in_type","in_inspector"].forEach(id => document.getElementById(id).value = "");
+            syncAll();
+        };
+
+        // Weather sync on input change
+        ["wx_tempC","wx_windKph","wx_precip","wx_notes"].forEach(id => {
+            document.getElementById(id).addEventListener("input", syncAll);
+        });
+
+        // Initialize hidden JSON to valid defaults before submit
+        syncAll();
+        document.getElementById("logForm").addEventListener("submit", syncAll);
+    </script>
+}

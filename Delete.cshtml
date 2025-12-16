@@ -1,0 +1,21 @@
+@page "{id:guid}"
+@model FieldLog.Pages.Logs.DeleteModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1 class="text-danger">Delete Daily Log</h1>
+
+<div class="alert alert-warning">
+    <strong>Warning:</strong> This will permanently delete this log.
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div><strong>Project:</strong> @Model.ProjectName</div>
+        <div><strong>Date:</strong> @Model.LogDate</div>
+    </div>
+</div>
+
+<form method="post" class="d-flex gap-2 flex-wrap">
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a class="btn btn-secondary" asp-page="/Logs/View" asp-route-id="@Model.Id">Cancel</a>
+</form>
