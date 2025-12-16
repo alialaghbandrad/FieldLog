@@ -40,6 +40,23 @@ builder.Services.AddAuthentication()
     });
 */
 
+// Google auth
+var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+var auth = builder.Services.AddAuthentication();
+
+if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(googleClientSecret))
+{
+    auth.AddGoogle(o =>
+    {
+        o.ClientId = googleClientId;
+        o.ClientSecret = googleClientSecret;
+    });
+}
+
+
+
 // Health checks
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>("db");
