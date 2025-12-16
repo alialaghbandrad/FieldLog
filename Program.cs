@@ -31,14 +31,14 @@ builder.Services
     })
     .AddEntityFrameworkStores<AppDbContext>();
 
-
+/*
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
         options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
         options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
     });
-
+*/
 
 // Health checks
 builder.Services.AddHealthChecks()
