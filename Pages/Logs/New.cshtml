@@ -7,7 +7,6 @@
 
 <form method="post" enctype="multipart/form-data" id="logForm">
     <input type="hidden" asp-for="ProjectId" />
-    <div asp-validation-summary="All" class="alert alert-danger"></div>
 
     <div class="mb-3">
         <label class="form-label">Log Date</label>
@@ -521,3 +520,4 @@
         document.getElementById("logForm").addEventListener("submit", syncAll);
     </script>
 }
+
