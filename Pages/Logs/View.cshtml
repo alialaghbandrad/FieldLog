@@ -48,10 +48,10 @@
     <div class="card-header"><strong>2) Weather Conditions</strong></div>
     <div class="card-body">
         <div class="row g-2">
-            <div class="col-md-3"><strong>Temp:</strong> @(Model.Weather.tempC?.ToString() ?? "—") °C</div>
-            <div class="col-md-3"><strong>Wind:</strong> @(Model.Weather.windKph?.ToString() ?? "—") kph</div>
-            <div class="col-md-3"><strong>Precip:</strong> @(Model.Weather.precip ?? "—")</div>
-            <div class="col-md-3"><strong>Notes:</strong> @(Model.Weather.notes ?? "—")</div>
+            <div class="col-md-3"><strong>Temp:</strong> @(Model.Weather.tempC?.ToString() ?? "â€”") Â°C</div>
+            <div class="col-md-3"><strong>Wind:</strong> @(Model.Weather.windKph?.ToString() ?? "â€”") kph</div>
+            <div class="col-md-3"><strong>Precip:</strong> @(Model.Weather.precip ?? "â€”")</div>
+            <div class="col-md-3"><strong>Notes:</strong> @(Model.Weather.notes ?? "â€”")</div>
         </div>
     </div>
 </div>
@@ -282,6 +282,6 @@
 <div class="card mb-3">
     <div class="card-header"><strong>General Notes</strong></div>
     <div class="card-body">
-        @(string.IsNullOrWhiteSpace(Model.Notes) ? "—" : Model.Notes)
+        @(string.IsNullOrWhiteSpace(Model.Notes) ? "â€”" : Model.Notes)
     </div>
 </div>
