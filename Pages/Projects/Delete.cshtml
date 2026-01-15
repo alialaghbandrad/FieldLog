@@ -1,0 +1,23 @@
+@page "{id:guid}"
+@model FieldLog.Pages.Projects.DeleteModel
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+<h1 class="text-danger">Delete Project</h1>
+
+<div class="alert alert-warning">
+    This action cannot be undone.
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">Name</dt>
+    <dd class="col-sm-9">@Model.Project.Name</dd>
+
+    <dt class="col-sm-3">Location</dt>
+    <dd class="col-sm-9">@Model.Project.Location</dd>
+</dl>
+
+<form method="post">
+    <input type="hidden" asp-for="Project.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="/Projects/Index" class="btn btn-secondary">Cancel</a>
+</form>
