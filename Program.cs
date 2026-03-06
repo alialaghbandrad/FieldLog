@@ -3,7 +3,6 @@ using FieldLog.Models;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Serilog: file + console logs
