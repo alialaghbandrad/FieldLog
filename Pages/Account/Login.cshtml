@@ -32,8 +32,8 @@
             <button type="submit" class="btn btn-primary w-100">Log in</button>
 
             <div class="mt-3 d-flex justify-content-between">
-                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
-                <a asp-page="./ForgotPassword">Forgot password?</a>
+                <a asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
+                <a asp-area="Identity" asp-page="/Account/ForgotPassword">Forgot password?</a>
             </div>
         </form>
     </div>
