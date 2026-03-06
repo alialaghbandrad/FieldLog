@@ -38,30 +38,18 @@ jobs:
   deploy:
     runs-on: windows-latest
     needs: build
-    permissions:
-      id-token: write
-      contents: read
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-          path: myapp
-
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5529097EBA6F4000813B022ACA74F5FA }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B2AB6E647DB7441AA49C15F317B40FD9 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7F0B584EACFB4A50A97C6D2927B17FA6 }}
-
+      
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'FieldLogApplication'
           slot-name: 'Production'
-          package: myapp
-
-          
+          package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8F4E2A0E4FE549C685DC5874042C464B }}
