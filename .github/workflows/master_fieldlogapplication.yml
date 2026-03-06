@@ -52,4 +52,5 @@ jobs:
           app-name: 'FieldLogApplication'
           slot-name: 'Production'
           package: .
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8F4E2A0E4FE549C685DC5874042C464B }}
