@@ -2,6 +2,8 @@ using FieldLog.Data;
 using FieldLog.Models;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using FieldLog.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +62,8 @@ if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(goo
 // Health checks
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>("db");
+
+builder.Services.AddSingleton<IEmailSender, NoOpEmailSender>();
 
 var app = builder.Build();
 
