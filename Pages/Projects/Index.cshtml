@@ -32,6 +32,17 @@ else
             <td>@p.CreatedAt.LocalDateTime.ToString("yyyy-MM-dd HH:mm")</td>
             <td>
                 <a class="btn btn-sm btn-outline-primary" asp-page="/Projects/Details" asp-route-id="@p.Id">Open</a>
+                        <a class="btn btn-sm btn-outline-secondary"
+                           asp-page="/Projects/Edit"
+                           asp-route-id="@p.Id">
+                            Edit
+                        </a>
+
+                        <a class="btn btn-sm btn-outline-danger"
+                           asp-page="/Projects/Delete"
+                           asp-route-id="@p.Id">
+                            Delete
+                        </a>
             </td>
         </tr>
         }
