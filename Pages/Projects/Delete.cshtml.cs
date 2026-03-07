@@ -41,4 +41,3 @@ namespace FieldLog.Pages.Projects
         }
     }
 }
-
